@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Break Sheet · Logs</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0e0f13; --surface:#16181f; --surface2:#1e2029; --border:#2a2d3a;
+    --text:#e8eaf0; --muted:#6b7080; --accent:#4f7cff; --accent2:#7c5cfc;
+    --on-break:#ff6b35; --done:#22c55e; --warning:#f59e0b; --kyiv:#38bdf8;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;}
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:12px;flex-wrap:wrap;}
+  .logo{font-size:19px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;}
+  .back-btn{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(79,124,255,0.15),rgba(124,92,252,0.15));border:1.5px solid rgba(79,124,255,0.45);border-radius:22px;color:#a5b4fc;cursor:pointer;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;padding:7px 16px;transition:all 0.2s;text-decoration:none;white-space:nowrap;}
+  .back-btn:hover{background:linear-gradient(135deg,rgba(79,124,255,0.28),rgba(124,92,252,0.28));border-color:rgba(79,124,255,0.8);color:#c4b5fd;}
+  .main{max-width:1200px;margin:0 auto;padding:24px 20px;}
+  .page-title{font-size:22px;font-weight:800;margin-bottom:4px;}
+  .page-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
+  /* Controls bar */
+  .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px;}
+  .search-wrap{position:relative;flex:1;min-width:200px;}
+  .search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;padding:9px 12px 9px 36px;outline:none;transition:border-color 0.2s;}
+  .search-wrap input:focus{border-color:var(--accent);}
+  .search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;opacity:0.5;}
+  .filter-select{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 32px 9px 12px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath d='M0 0l4.5 5L9 0z' fill='%236b7080'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 10px center;transition:border-color 0.2s;}
+  .filter-select:focus{border-color:var(--accent);}
+  .stats-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
+  .mini-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 16px;display:flex;flex-direction:column;gap:2px;min-width:120px;}
+  .mini-stat-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);}
+  .mini-stat-value{font-size:22px;font-weight:800;font-family:'DM Mono',monospace;line-height:1;}
+  .refresh-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:9px 16px;transition:all 0.18s;white-space:nowrap;}
+  .refresh-btn:hover{border-color:var(--accent);color:var(--accent);}
+  .clear-old-btn{background:rgba(255,107,53,0.07);border:1px solid rgba(255,107,53,0.3);border-radius:8px;color:var(--on-break);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:9px 16px;transition:all 0.18s;white-space:nowrap;}
+  .clear-old-btn:hover{background:rgba(255,107,53,0.16);}
+  /* Log table */
+  .log-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
+  .log-table-head{display:grid;grid-template-columns:160px 120px 130px 1fr;gap:0;background:var(--surface2);border-bottom:1px solid var(--border);padding:10px 18px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:var(--muted);}
+  .log-row{display:grid;grid-template-columns:160px 120px 130px 1fr;gap:0;padding:11px 18px;border-bottom:1px solid var(--border);transition:background 0.15s;align-items:start;}
+  .log-row:last-child{border-bottom:none;}
+  .log-row:hover{background:var(--surface2);}
+  .log-time{font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);}
+  .log-event{display:inline-flex;align-items:center;gap:5px;}
+  .event-badge{display:inline-block;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:0.8px;font-family:'DM Mono',monospace;white-space:nowrap;}
+  .badge-BREAK_STARTED{background:rgba(255,107,53,0.18);color:var(--on-break);border:1px solid rgba(255,107,53,0.35);}
+  .badge-BREAK_STOPPED{background:rgba(34,197,94,0.13);color:var(--done);border:1px solid rgba(34,197,94,0.3);}
+  .badge-BREAK_BOOKED{background:rgba(79,124,255,0.13);color:#7ea5ff;border:1px solid rgba(79,124,255,0.3);}
+  .badge-SLOT_CLEARED{background:rgba(245,158,11,0.10);color:var(--warning);border:1px solid rgba(245,158,11,0.28);}
+  .badge-ROW_CLEARED{background:rgba(245,158,11,0.10);color:var(--warning);border:1px solid rgba(245,158,11,0.28);}
+  .badge-ALL_CLEARED{background:rgba(255,60,60,0.13);color:#ff6060;border:1px solid rgba(255,60,60,0.3);}
+  .badge-AGENT_SELECTED{background:rgba(56,189,248,0.10);color:var(--kyiv);border:1px solid rgba(56,189,248,0.28);}
+  .badge-AGENT_CLEARED{background:rgba(107,112,128,0.13);color:var(--muted);border:1px solid rgba(107,112,128,0.28);}
+  .badge-AGENTS_UPDATED{background:rgba(124,92,252,0.13);color:#a78bfa;border:1px solid rgba(124,92,252,0.28);}
+  .log-who{font-family:'DM Mono',monospace;font-size:12px;color:#a5b4fc;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .log-detail{font-size:13px;color:var(--text);line-height:1.5;word-break:break-word;}
+  .empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+  .empty-icon{font-size:40px;margin-bottom:12px;}
+  .empty-text{font-size:15px;}
+  .loading-state{text-align:center;padding:60px 20px;color:var(--muted);font-family:'DM Mono',monospace;}
+  /* Day separator */
+  .day-separator{padding:8px 18px;background:rgba(79,124,255,0.05);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);display:flex;align-items:center;gap:8px;}
+  .day-sep-line{flex:1;height:1px;background:rgba(79,124,255,0.15);}
+  /* Sync bar */
+  .sync-bar{position:fixed;bottom:16px;right:16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-family:'DM Mono',monospace;color:var(--muted);display:flex;align-items:center;gap:7px;z-index:999;}
+  .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--done);}
+  .sync-dot.loading{background:var(--warning);animation:blink 0.7s infinite;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+  ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--surface);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+  @media(max-width:700px){
+    .log-table-head,.log-row{grid-template-columns:1fr;gap:4px;}
+    .log-table-head .col-detail{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div class="logo">⏸ Break Sheet</div>
+    <span style="color:var(--muted);font-size:13px;font-family:'DM Mono',monospace;">/ Logs</span>
+  </div>
+</header>
+
+<div class="main">
+  <div class="page-title">Activity Logs</div>
+  <div class="page-sub" id="log-range-label">Last 7 days · loading...</div>
+
+  <div class="stats-row" id="stats-row">
+    <div class="mini-stat"><div class="mini-stat-label">Total Events</div><div class="mini-stat-value" id="s-total" style="color:var(--text)">—</div></div>
+    <div class="mini-stat"><div class="mini-stat-label">Breaks Started</div><div class="mini-stat-value" id="s-started" style="color:var(--on-break)">—</div></div>
+    <div class="mini-stat"><div class="mini-stat-label">Breaks Booked</div><div class="mini-stat-value" id="s-booked" style="color:#7ea5ff">—</div></div>
+    <div class="mini-stat"><div class="mini-stat-label">Slots Cleared</div><div class="mini-stat-value" id="s-cleared" style="color:var(--warning)">—</div></div>
+  </div>
+
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="Search agent, event, detail..." oninput="applyFilters()"/>
+    </div>
+    <select class="filter-select" id="event-filter" onchange="applyFilters()">
+      <option value="">All events</option>
+      <option value="BREAK_STARTED">Break Started</option>
+      <option value="BREAK_STOPPED">Break Stopped</option>
+      <option value="BREAK_BOOKED">Break Booked</option>
+      <option value="SLOT_CLEARED">Slot Cleared</option>
+      <option value="ROW_CLEARED">Row Cleared</option>
+      <option value="ALL_CLEARED">All Cleared</option>
+      <option value="AGENT_SELECTED">Agent Selected</option>
+      <option value="AGENT_CLEARED">Agent Cleared</option>
+      <option value="AGENTS_UPDATED">Agents Updated</option>
+    </select>
+    <select class="filter-select" id="day-filter" onchange="applyFilters()">
+      <option value="">All days</option>
+    </select>
+    <button class="refresh-btn" onclick="loadLogs()">↻ Refresh</button>
+    <button class="clear-old-btn" onclick="pruneOldLogs()">🗑 Prune >7 days</button>
+  </div>
+
+  <div class="log-table-wrap" id="log-table-wrap">
+    <div class="log-table-head">
+      <div>Kyiv Time</div>
+      <div>Event</div>
+      <div>Who</div>
+      <div class="col-detail">Detail</div>
+    </div>
+    <div id="log-body">
+      <div class="loading-state">⏳ Loading logs...</div>
+    </div>
+  </div>
+</div>
+
+<div class="sync-bar">
+  <div class="sync-dot loading" id="sync-dot"></div>
+  <span id="sync-label">Loading...</span>
+</div>
+
+<script>
+var DB_URL = 'https://breaksheetstarspartners-default-rtdb.europe-west1.firebasedatabase.app/';
+var allLogs = [];
+
+var EVENT_LABELS = {
+  BREAK_STARTED:  'STARTED',
+  BREAK_STOPPED:  'STOPPED',
+  BREAK_BOOKED:   'BOOKED',
+  SLOT_CLEARED:   'SLOT CLR',
+  ROW_CLEARED:    'ROW CLR',
+  ALL_CLEARED:    'ALL CLR',
+  AGENT_SELECTED: 'AGENT IN',
+  AGENT_CLEARED:  'AGENT OUT',
+  AGENTS_UPDATED: 'NAMES CHG'
+};
+
+function setSyncStatus(state, text) {
+  var dot = document.getElementById('sync-dot');
+  var lbl = document.getElementById('sync-label');
+  dot.className = 'sync-dot' + (state === 'loading' ? ' loading' : '');
+  lbl.textContent = text;
+}
+
+function loadLogs() {
+  setSyncStatus('loading', 'Loading...');
+  var sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  fetch(DB_URL + '/logs.json')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      allLogs = [];
+      if (data && typeof data === 'object' && !data.error) {
+        Object.values(data).forEach(function(entry) {
+          if (entry && entry.ts && entry.ts >= sevenDaysAgo) {
+            allLogs.push(entry);
+          }
+        });
+      } else if (data && data.error) {
+        throw new Error('Firebase error: ' + data.error);
+      }
+      // Sort newest first
+      allLogs.sort(function(a, b) { return b.ts - a.ts; });
+      populateDayFilter();
+      updateStats();
+      applyFilters();
+      setSyncStatus('ok', 'Loaded ' + allLogs.length + ' events');
+      updateRangeLabel();
+    })
+    .catch(function(e) {
+      console.error(e);
+      setSyncStatus('err', 'Error loading');
+      document.getElementById('log-body').innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-text">Failed to load logs. Check your Firebase rules allow reading /logs.</div></div>';
+    });
+}
+
+function updateRangeLabel() {
+  var label = document.getElementById('log-range-label');
+  if (allLogs.length === 0) { label.textContent = 'Last 7 days · no events found'; return; }
+  var oldest = new Date(allLogs[allLogs.length - 1].ts);
+  var newest = new Date(allLogs[0].ts);
+  var fmtOld = oldest.toLocaleDateString('en-GB', {timeZone:'Europe/Kyiv', day:'2-digit', month:'short', year:'numeric'});
+  var fmtNew = newest.toLocaleDateString('en-GB', {timeZone:'Europe/Kyiv', day:'2-digit', month:'short', year:'numeric'});
+  label.textContent = 'Last 7 days · ' + allLogs.length + ' events · ' + fmtOld + ' – ' + fmtNew;
+}
+
+function populateDayFilter() {
+  var sel = document.getElementById('day-filter');
+  var current = sel.value;
+  // Keep first option
+  while (sel.options.length > 1) sel.remove(1);
+  var days = {};
+  allLogs.forEach(function(log) {
+    var d = new Date(log.ts).toLocaleDateString('en-GB', {timeZone:'Europe/Kyiv', day:'2-digit', month:'short', year:'numeric'});
+    days[d] = true;
+  });
+  Object.keys(days).forEach(function(d) {
+    var opt = document.createElement('option');
+    opt.value = d; opt.textContent = d;
+    if (d === current) opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+function updateStats() {
+  document.getElementById('s-total').textContent = allLogs.length;
+  document.getElementById('s-started').textContent = allLogs.filter(function(l){return l.event==='BREAK_STARTED';}).length;
+  document.getElementById('s-booked').textContent = allLogs.filter(function(l){return l.event==='BREAK_BOOKED';}).length;
+  document.getElementById('s-cleared').textContent = allLogs.filter(function(l){return l.event==='SLOT_CLEARED'||l.event==='ROW_CLEARED'||l.event==='ALL_CLEARED';}).length;
+}
+
+function applyFilters() {
+  var q = document.getElementById('search-input').value.toLowerCase().trim();
+  var evtF = document.getElementById('event-filter').value;
+  var dayF = document.getElementById('day-filter').value;
+
+  var filtered = allLogs.filter(function(log) {
+    if (evtF && log.event !== evtF) return false;
+    if (dayF) {
+      var d = new Date(log.ts).toLocaleDateString('en-GB', {timeZone:'Europe/Kyiv', day:'2-digit', month:'short', year:'numeric'});
+      if (d !== dayF) return false;
+    }
+    if (q) {
+      var haystack = (log.kyiv + ' ' + log.event + ' ' + log.detail + ' ' + (log.who||'')).toLowerCase();
+      if (!haystack.includes(q)) return false;
+    }
+    return true;
+  });
+
+  renderLogs(filtered);
+}
+
+function renderLogs(logs) {
+  var body = document.getElementById('log-body');
+  if (logs.length === 0) {
+    body.innerHTML = '<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-text">No events match your filters.</div></div>';
+    return;
+  }
+
+  var html = '';
+  var lastDay = '';
+
+  logs.forEach(function(log) {
+    var d = new Date(log.ts).toLocaleDateString('en-GB', {timeZone:'Europe/Kyiv', weekday:'long', day:'2-digit', month:'long', year:'numeric'});
+    if (d !== lastDay) {
+      html += '<div class="day-separator"><span>' + d + '</span><span class="day-sep-line"></span></div>';
+      lastDay = d;
+    }
+    var label = EVENT_LABELS[log.event] || log.event;
+    var badgeCls = 'event-badge badge-' + (log.event || 'UNKNOWN');
+    // Extract just time from kyiv string
+    var timeStr = log.kyiv || '';
+    // kyiv format: "DD.MM.YYYY, HH:MM:SS" or "HH:MM:SS"
+    var timePart = timeStr.includes(',') ? timeStr.split(',')[1].trim() : timeStr;
+
+    var whoStr = log.who || '—';
+    html += '<div class="log-row">' +
+      '<div class="log-time">' + escHtml(timePart) + '</div>' +
+      '<div class="log-event"><span class="' + badgeCls + '">' + escHtml(label) + '</span></div>' +
+      '<div class="log-who">' + escHtml(whoStr) + '</div>' +
+      '<div class="log-detail">' + escHtml(log.detail || '') + '</div>' +
+    '</div>';
+  });
+
+  body.innerHTML = html;
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function pruneOldLogs() {
+  if (!confirm('Delete all log entries older than 7 days from the database?')) return;
+  setSyncStatus('loading', 'Pruning...');
+  var cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  fetch(DB_URL + '/logs.json?orderBy="ts"&endAt=' + cutoff)
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data) { setSyncStatus('ok', 'Nothing to prune'); return; }
+      var keys = Object.keys(data);
+      var promises = keys.map(function(k) {
+        return fetch(DB_URL + '/logs/' + k + '.json', {method:'DELETE'});
+      });
+      return Promise.all(promises).then(function() {
+        setSyncStatus('ok', 'Pruned ' + keys.length + ' old entries');
+        loadLogs();
+      });
+    })
+    .catch(function() { setSyncStatus('err', 'Prune failed'); });
+}
+
+// Auto-refresh every 30 seconds
+setInterval(loadLogs, 1000);
+loadLogs();
+</script>
+</body>
+</html>
