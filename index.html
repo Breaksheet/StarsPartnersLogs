@@ -20,13 +20,12 @@
   .main{max-width:1200px;margin:0 auto;padding:24px 20px;}
   .page-title{font-size:22px;font-weight:800;margin-bottom:4px;}
   .page-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
-  /* Controls bar */
   .controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:18px;}
   .search-wrap{position:relative;flex:1;min-width:200px;}
   .search-wrap input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:14px;padding:9px 12px 9px 36px;outline:none;transition:border-color 0.2s;}
   .search-wrap input:focus{border-color:var(--accent);}
   .search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:15px;pointer-events:none;opacity:0.5;}
-  .filter-select{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 32px 9px 12px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath d='M0 0l4.5 5L9 0z' fill='%236b7080'/%3E%3C/svg%3E\");background-repeat:no-repeat;background-position:right 10px center;transition:border-color 0.2s;}
+  .filter-select{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 32px 9px 12px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath d='M0 0l4.5 5L9 0z' fill='%236b7080'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;transition:border-color 0.2s;}
   .filter-select:focus{border-color:var(--accent);}
   .stats-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
   .mini-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 16px;display:flex;flex-direction:column;gap:2px;min-width:120px;}
@@ -34,9 +33,6 @@
   .mini-stat-value{font-size:22px;font-weight:800;font-family:'DM Mono',monospace;line-height:1;}
   .refresh-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:9px 16px;transition:all 0.18s;white-space:nowrap;}
   .refresh-btn:hover{border-color:var(--accent);color:var(--accent);}
-  .clear-old-btn{background:rgba(255,107,53,0.07);border:1px solid rgba(255,107,53,0.3);border-radius:8px;color:var(--on-break);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:9px 16px;transition:all 0.18s;white-space:nowrap;}
-  .clear-old-btn:hover{background:rgba(255,107,53,0.16);}
-  /* Log table */
   .log-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;}
   .log-table-head{display:grid;grid-template-columns:160px 120px 130px 1fr;gap:0;background:var(--surface2);border-bottom:1px solid var(--border);padding:10px 18px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.8px;color:var(--muted);}
   .log-row{display:grid;grid-template-columns:160px 120px 130px 1fr;gap:0;padding:11px 18px;border-bottom:1px solid var(--border);transition:background 0.15s;align-items:start;}
@@ -60,10 +56,8 @@
   .empty-icon{font-size:40px;margin-bottom:12px;}
   .empty-text{font-size:15px;}
   .loading-state{text-align:center;padding:60px 20px;color:var(--muted);font-family:'DM Mono',monospace;}
-  /* Day separator */
   .day-separator{padding:8px 18px;background:rgba(79,124,255,0.05);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:var(--accent);display:flex;align-items:center;gap:8px;}
   .day-sep-line{flex:1;height:1px;background:rgba(79,124,255,0.15);}
-  /* Sync bar */
   .sync-bar{position:fixed;bottom:16px;right:16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-family:'DM Mono',monospace;color:var(--muted);display:flex;align-items:center;gap:7px;z-index:999;}
   .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--done);}
   .sync-dot.loading{background:var(--warning);animation:blink 0.7s infinite;}
@@ -86,7 +80,7 @@
 
 <div class="main">
   <div class="page-title">Activity Logs</div>
-  <div class="page-sub" id="log-range-label">Last 7 days · loading...</div>
+  <div class="page-sub" id="log-range-label">Last 48 hours · loading...</div>
 
   <div class="stats-row" id="stats-row">
     <div class="mini-stat"><div class="mini-stat-label">Total Events</div><div class="mini-stat-value" id="s-total" style="color:var(--text)">—</div></div>
@@ -116,7 +110,6 @@
       <option value="">All days</option>
     </select>
     <button class="refresh-btn" onclick="loadLogs()">↻ Refresh</button>
-    <button class="clear-old-btn" onclick="pruneOldLogs()">🗑 Prune >7 days</button>
   </div>
 
   <div class="log-table-wrap" id="log-table-wrap">
@@ -162,21 +155,20 @@ function setSyncStatus(state, text) {
 
 function loadLogs() {
   setSyncStatus('loading', 'Loading...');
-  var sevenDaysAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+  var fortyEightHoursAgo = Date.now() - 48 * 60 * 60 * 1000;
   fetch(DB_URL + '/logs.json')
     .then(function(r) { return r.json(); })
     .then(function(data) {
       allLogs = [];
       if (data && typeof data === 'object' && !data.error) {
         Object.values(data).forEach(function(entry) {
-          if (entry && entry.ts && entry.ts >= sevenDaysAgo) {
+          if (entry && entry.ts && entry.ts >= fortyEightHoursAgo) {
             allLogs.push(entry);
           }
         });
       } else if (data && data.error) {
         throw new Error('Firebase error: ' + data.error);
       }
-      // Sort newest first
       allLogs.sort(function(a, b) { return b.ts - a.ts; });
       populateDayFilter();
       updateStats();
@@ -193,18 +185,17 @@ function loadLogs() {
 
 function updateRangeLabel() {
   var label = document.getElementById('log-range-label');
-  if (allLogs.length === 0) { label.textContent = 'Last 7 days · no events found'; return; }
+  if (allLogs.length === 0) { label.textContent = 'Last 48 hours · no events found'; return; }
   var oldest = new Date(allLogs[allLogs.length - 1].ts);
   var newest = new Date(allLogs[0].ts);
   var fmtOld = oldest.toLocaleDateString('en-GB', {timeZone:'Europe/Kyiv', day:'2-digit', month:'short', year:'numeric'});
   var fmtNew = newest.toLocaleDateString('en-GB', {timeZone:'Europe/Kyiv', day:'2-digit', month:'short', year:'numeric'});
-  label.textContent = 'Last 7 days · ' + allLogs.length + ' events · ' + fmtOld + ' – ' + fmtNew;
+  label.textContent = 'Last 48 hours · ' + allLogs.length + ' events · ' + fmtOld + ' – ' + fmtNew;
 }
 
 function populateDayFilter() {
   var sel = document.getElementById('day-filter');
   var current = sel.value;
-  // Keep first option
   while (sel.options.length > 1) sel.remove(1);
   var days = {};
   allLogs.forEach(function(log) {
@@ -265,11 +256,8 @@ function renderLogs(logs) {
     }
     var label = EVENT_LABELS[log.event] || log.event;
     var badgeCls = 'event-badge badge-' + (log.event || 'UNKNOWN');
-    // Extract just time from kyiv string
     var timeStr = log.kyiv || '';
-    // kyiv format: "DD.MM.YYYY, HH:MM:SS" or "HH:MM:SS"
     var timePart = timeStr.includes(',') ? timeStr.split(',')[1].trim() : timeStr;
-
     var whoStr = log.who || '—';
     html += '<div class="log-row">' +
       '<div class="log-time">' + escHtml(timePart) + '</div>' +
@@ -286,28 +274,8 @@ function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function pruneOldLogs() {
-  if (!confirm('Delete all log entries older than 7 days from the database?')) return;
-  setSyncStatus('loading', 'Pruning...');
-  var cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
-  fetch(DB_URL + '/logs.json?orderBy="ts"&endAt=' + cutoff)
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (!data) { setSyncStatus('ok', 'Nothing to prune'); return; }
-      var keys = Object.keys(data);
-      var promises = keys.map(function(k) {
-        return fetch(DB_URL + '/logs/' + k + '.json', {method:'DELETE'});
-      });
-      return Promise.all(promises).then(function() {
-        setSyncStatus('ok', 'Pruned ' + keys.length + ' old entries');
-        loadLogs();
-      });
-    })
-    .catch(function() { setSyncStatus('err', 'Prune failed'); });
-}
-
 // Auto-refresh every 30 seconds
-setInterval(loadLogs, 1000);
+setInterval(loadLogs, 10000);
 loadLogs();
 </script>
 </body>
