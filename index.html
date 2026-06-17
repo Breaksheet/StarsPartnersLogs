@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Break Sheet · Logs</title>
+<title>Break Sheet · Logs (SP)</title>
+<!-- logs-SP-v202606180100 -->
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -15,8 +16,6 @@
   body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;min-height:100vh;}
   header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;gap:12px;flex-wrap:wrap;}
   .logo{font-size:19px;font-weight:800;letter-spacing:-0.5px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap;}
-  .back-btn{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,rgba(79,124,255,0.15),rgba(124,92,252,0.15));border:1.5px solid rgba(79,124,255,0.45);border-radius:22px;color:#a5b4fc;cursor:pointer;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;padding:7px 16px;transition:all 0.2s;text-decoration:none;white-space:nowrap;}
-  .back-btn:hover{background:linear-gradient(135deg,rgba(79,124,255,0.28),rgba(124,92,252,0.28));border-color:rgba(79,124,255,0.8);color:#c4b5fd;}
   .main{max-width:1200px;margin:0 auto;padding:24px 20px;}
   .page-title{font-size:22px;font-weight:800;margin-bottom:4px;}
   .page-sub{font-size:13px;color:var(--muted);margin-bottom:20px;}
@@ -28,7 +27,7 @@
   .filter-select{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;padding:9px 32px 9px 12px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='5'%3E%3Cpath d='M0 0l4.5 5L9 0z' fill='%236b7080'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;transition:border-color 0.2s;}
   .filter-select:focus{border-color:var(--accent);}
   .stats-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;}
-  .mini-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 16px;display:flex;flex-direction:column;gap:2px;min-width:120px;}
+  .mini-stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 16px;display:flex;flex-direction:column;gap:2px;min-width:110px;flex:1;}
   .mini-stat-label{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);}
   .mini-stat-value{font-size:22px;font-weight:800;font-family:'DM Mono',monospace;line-height:1;}
   .refresh-btn{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:9px 16px;transition:all 0.18s;white-space:nowrap;}
@@ -41,15 +40,18 @@
   .log-time{font-family:'DM Mono',monospace;font-size:13px;color:var(--muted);}
   .log-event{display:inline-flex;align-items:center;gap:5px;}
   .event-badge{display:inline-block;padding:2px 8px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:0.8px;font-family:'DM Mono',monospace;white-space:nowrap;}
+  /* Badges — match the SP app's actual event vocabulary */
+  .badge-SESSION_START{background:rgba(56,189,248,0.12);color:var(--kyiv);border:1px solid rgba(56,189,248,0.32);}
+  .badge-BREAK_BOOKED{background:rgba(79,124,255,0.13);color:#7ea5ff;border:1px solid rgba(79,124,255,0.3);}
   .badge-BREAK_STARTED{background:rgba(255,107,53,0.18);color:var(--on-break);border:1px solid rgba(255,107,53,0.35);}
   .badge-BREAK_STOPPED{background:rgba(34,197,94,0.13);color:var(--done);border:1px solid rgba(34,197,94,0.3);}
-  .badge-BREAK_BOOKED{background:rgba(79,124,255,0.13);color:#7ea5ff;border:1px solid rgba(79,124,255,0.3);}
   .badge-SLOT_CLEARED{background:rgba(245,158,11,0.10);color:var(--warning);border:1px solid rgba(245,158,11,0.28);}
-  .badge-ROW_CLEARED{background:rgba(245,158,11,0.10);color:var(--warning);border:1px solid rgba(245,158,11,0.28);}
-  .badge-ALL_CLEARED{background:rgba(255,60,60,0.13);color:#ff6060;border:1px solid rgba(255,60,60,0.3);}
-  .badge-AGENT_SELECTED{background:rgba(56,189,248,0.10);color:var(--kyiv);border:1px solid rgba(56,189,248,0.28);}
-  .badge-AGENT_CLEARED{background:rgba(107,112,128,0.13);color:var(--muted);border:1px solid rgba(107,112,128,0.28);}
-  .badge-AGENTS_UPDATED{background:rgba(124,92,252,0.13);color:#a78bfa;border:1px solid rgba(124,92,252,0.28);}
+  .badge-AGENT_AUTO_ADDED{background:rgba(45,212,191,0.13);color:#2dd4bf;border:1px solid rgba(45,212,191,0.32);}
+  .badge-AGENT_AUTO_REMOVED{background:rgba(107,112,128,0.14);color:#9aa0b0;border:1px solid rgba(107,112,128,0.3);}
+  .badge-SCHEDULE_REFRESH{background:rgba(124,92,252,0.13);color:#a78bfa;border:1px solid rgba(124,92,252,0.3);}
+  .badge-AGENTS_CLEARED{background:rgba(255,60,60,0.13);color:#ff6060;border:1px solid rgba(255,60,60,0.3);}
+  .badge-AGENTS_UPDATED{background:rgba(124,92,252,0.13);color:#a78bfa;border:1px solid rgba(124,92,252,0.3);}
+  .badge-UNKNOWN{background:rgba(107,112,128,0.10);color:var(--muted);border:1px solid rgba(107,112,128,0.25);}
   .log-who{font-family:'DM Mono',monospace;font-size:12px;color:#a5b4fc;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .log-detail{font-size:13px;color:var(--text);line-height:1.5;word-break:break-word;}
   .empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
@@ -61,6 +63,7 @@
   .sync-bar{position:fixed;bottom:16px;right:16px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px 14px;font-size:14px;font-family:'DM Mono',monospace;color:var(--muted);display:flex;align-items:center;gap:7px;z-index:999;}
   .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--done);}
   .sync-dot.loading{background:var(--warning);animation:blink 0.7s infinite;}
+  .sync-dot.err{background:var(--on-break);}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
   ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--surface);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
   @media(max-width:700px){
@@ -74,7 +77,7 @@
 <header>
   <div style="display:flex;align-items:center;gap:12px;">
     <div class="logo">⏸ Break Sheet</div>
-    <span style="color:var(--muted);font-size:13px;font-family:'DM Mono',monospace;">/ Logs</span>
+    <span style="color:var(--muted);font-size:13px;font-family:'DM Mono',monospace;">/ Logs · StarsPartners</span>
   </div>
 </header>
 
@@ -87,6 +90,9 @@
     <div class="mini-stat"><div class="mini-stat-label">Breaks Started</div><div class="mini-stat-value" id="s-started" style="color:var(--on-break)">—</div></div>
     <div class="mini-stat"><div class="mini-stat-label">Breaks Booked</div><div class="mini-stat-value" id="s-booked" style="color:#7ea5ff">—</div></div>
     <div class="mini-stat"><div class="mini-stat-label">Slots Cleared</div><div class="mini-stat-value" id="s-cleared" style="color:var(--warning)">—</div></div>
+    <div class="mini-stat"><div class="mini-stat-label">Sessions</div><div class="mini-stat-value" id="s-sessions" style="color:var(--kyiv)">—</div></div>
+    <div class="mini-stat"><div class="mini-stat-label">Auto Added</div><div class="mini-stat-value" id="s-added" style="color:#2dd4bf">—</div></div>
+    <div class="mini-stat"><div class="mini-stat-label">Auto Removed</div><div class="mini-stat-value" id="s-removed" style="color:#9aa0b0">—</div></div>
   </div>
 
   <div class="controls">
@@ -96,14 +102,15 @@
     </div>
     <select class="filter-select" id="event-filter" onchange="applyFilters()">
       <option value="">All events</option>
+      <option value="SESSION_START">Session Start</option>
+      <option value="BREAK_BOOKED">Break Booked</option>
       <option value="BREAK_STARTED">Break Started</option>
       <option value="BREAK_STOPPED">Break Stopped</option>
-      <option value="BREAK_BOOKED">Break Booked</option>
       <option value="SLOT_CLEARED">Slot Cleared</option>
-      <option value="ROW_CLEARED">Row Cleared</option>
-      <option value="ALL_CLEARED">All Cleared</option>
-      <option value="AGENT_SELECTED">Agent Selected</option>
-      <option value="AGENT_CLEARED">Agent Cleared</option>
+      <option value="AGENT_AUTO_ADDED">Agent Auto-Added</option>
+      <option value="AGENT_AUTO_REMOVED">Agent Auto-Removed</option>
+      <option value="SCHEDULE_REFRESH">Schedule Refresh</option>
+      <option value="AGENTS_CLEARED">Agents Cleared</option>
       <option value="AGENTS_UPDATED">Agents Updated</option>
     </select>
     <select class="filter-select" id="day-filter" onchange="applyFilters()">
@@ -134,22 +141,24 @@
 var DB_URL = 'https://breaksheetstarspartners-default-rtdb.europe-west1.firebasedatabase.app/';
 var allLogs = [];
 
+/* Event vocabulary — matches exactly what breaksheet_SP.html writes via writeLog() */
 var EVENT_LABELS = {
-  BREAK_STARTED:  'STARTED',
-  BREAK_STOPPED:  'STOPPED',
-  BREAK_BOOKED:   'BOOKED',
-  SLOT_CLEARED:   'SLOT CLR',
-  ROW_CLEARED:    'ROW CLR',
-  ALL_CLEARED:    'ALL CLR',
-  AGENT_SELECTED: 'AGENT IN',
-  AGENT_CLEARED:  'AGENT OUT',
-  AGENTS_UPDATED: 'NAMES CHG'
+  SESSION_START:      'SESSION',
+  BREAK_BOOKED:       'BOOKED',
+  BREAK_STARTED:      'STARTED',
+  BREAK_STOPPED:      'STOPPED',
+  SLOT_CLEARED:       'SLOT CLR',
+  AGENT_AUTO_ADDED:   'AUTO IN',
+  AGENT_AUTO_REMOVED: 'AUTO OUT',
+  SCHEDULE_REFRESH:   'SCHED \u21BB',
+  AGENTS_CLEARED:     'AGENTS CLR',
+  AGENTS_UPDATED:     'NAMES CHG'
 };
 
 function setSyncStatus(state, text) {
   var dot = document.getElementById('sync-dot');
   var lbl = document.getElementById('sync-label');
-  dot.className = 'sync-dot' + (state === 'loading' ? ' loading' : '');
+  dot.className = 'sync-dot' + (state === 'loading' ? ' loading' : state === 'err' ? ' err' : '');
   lbl.textContent = text;
 }
 
@@ -210,11 +219,15 @@ function populateDayFilter() {
   });
 }
 
+function countEvt(){ var names=[].slice.call(arguments); return allLogs.filter(function(l){ return names.indexOf(l.event)>=0; }).length; }
 function updateStats() {
-  document.getElementById('s-total').textContent = allLogs.length;
-  document.getElementById('s-started').textContent = allLogs.filter(function(l){return l.event==='BREAK_STARTED';}).length;
-  document.getElementById('s-booked').textContent = allLogs.filter(function(l){return l.event==='BREAK_BOOKED';}).length;
-  document.getElementById('s-cleared').textContent = allLogs.filter(function(l){return l.event==='SLOT_CLEARED'||l.event==='ROW_CLEARED'||l.event==='ALL_CLEARED';}).length;
+  document.getElementById('s-total').textContent   = allLogs.length;
+  document.getElementById('s-started').textContent = countEvt('BREAK_STARTED');
+  document.getElementById('s-booked').textContent  = countEvt('BREAK_BOOKED');
+  document.getElementById('s-cleared').textContent = countEvt('SLOT_CLEARED');
+  document.getElementById('s-sessions').textContent= countEvt('SESSION_START');
+  document.getElementById('s-added').textContent   = countEvt('AGENT_AUTO_ADDED');
+  document.getElementById('s-removed').textContent = countEvt('AGENT_AUTO_REMOVED');
 }
 
 function applyFilters() {
@@ -229,7 +242,7 @@ function applyFilters() {
       if (d !== dayF) return false;
     }
     if (q) {
-      var haystack = (log.kyiv + ' ' + log.event + ' ' + log.detail + ' ' + (log.who||'')).toLowerCase();
+      var haystack = ((log.kyiv||'') + ' ' + (log.event||'') + ' ' + (log.detail||'') + ' ' + (log.who||'')).toLowerCase();
       if (!haystack.includes(q)) return false;
     }
     return true;
@@ -254,10 +267,11 @@ function renderLogs(logs) {
       html += '<div class="day-separator"><span>' + d + '</span><span class="day-sep-line"></span></div>';
       lastDay = d;
     }
-    var label = EVENT_LABELS[log.event] || log.event;
-    var badgeCls = 'event-badge badge-' + (log.event || 'UNKNOWN');
+    var known = EVENT_LABELS.hasOwnProperty(log.event);
+    var label = known ? EVENT_LABELS[log.event] : (log.event || 'UNKNOWN');
+    var badgeCls = 'event-badge badge-' + (known ? log.event : 'UNKNOWN');
     var timeStr = log.kyiv || '';
-    var timePart = timeStr.includes(',') ? timeStr.split(',')[1].trim() : timeStr;
+    var timePart = timeStr.indexOf(',') >= 0 ? timeStr.split(',')[1].trim() : timeStr;
     var whoStr = log.who || '—';
     html += '<div class="log-row">' +
       '<div class="log-time">' + escHtml(timePart) + '</div>' +
@@ -274,8 +288,8 @@ function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// Auto-refresh every 30 seconds
-setInterval(loadLogs, 10000);
+/* Auto-refresh every 30 seconds */
+setInterval(loadLogs, 30000);
 loadLogs();
 </script>
 </body>
